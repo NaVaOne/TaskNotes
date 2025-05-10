@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions
-from rest_framework.filters import SearchFilter  # Импорт из DRF
+from rest_framework.filters import SearchFilter  
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 from .serializers import TaskSerializer, TaskListSerializer
 from .models import Task
@@ -15,7 +15,7 @@ class TaskFilter(FilterSet):
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = (DjangoFilterBackend, SearchFilter)  # Исправлено
+    filter_backends = (DjangoFilterBackend, SearchFilter) 
     filterset_class = TaskFilter
     search_fields = ('title',)
     ordering_fields = ('deadline', 'created_at', 'updated_at')

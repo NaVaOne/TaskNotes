@@ -6,7 +6,6 @@ from tasks.models import Task
 
 @shared_task
 def send_deadline_notification(task_id):
-
     try:
         task = Task.objects.get(id=task_id)
 
@@ -36,7 +35,7 @@ def schedule_notification(task_id):
         
         # Отменяем предыдущее уведомление (если было)
         if task.celery_task_id:
-            from todo_project.celery import app  # Импортируем экземпляр Celery
+            from todo_project.celery import app  
             app.control.revoke(task.celery_task_id, terminate=True)
         
         # Вычисляем время отправки (за 5 минут до дедлайна)
@@ -44,10 +43,7 @@ def schedule_notification(task_id):
         
         # Проверяем, что время еще не прошло
         if eta > timezone.now():
-            # Планируем задачу
             result = send_deadline_notification.apply_async(args=[task.id], eta=eta)
-            
-            # Сохраняем ID задачи Celery
             task.celery_task_id = result.id
             task.save()
             

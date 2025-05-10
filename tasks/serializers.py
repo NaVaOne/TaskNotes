@@ -3,9 +3,10 @@ from .models import Task
 from django.utils import timezone
 
 class TaskSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     class Meta:
         model = Task
-        fields = ('id', 'title', 'description', 'deadline', 'is_completed')
+        fields = ('id','user' ,'title', 'description', 'deadline', 'is_completed')
         read_only_fields = ('id', 'created_at', 'updated_at', 'is_alerted', 'celery_task_id')
 
     def validate_deadline(self, value):
